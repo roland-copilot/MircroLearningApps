@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "927101801879",
+    "project_id": "microlearning-app-itb",
+    "storage_bucket": "microlearning-app-itb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927101801879:android:19a440602f19d2ca3960d2",
+        "android_client_info": {
+          "package_name": "com.example.elearning"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIBGTDC7SzPJ2bhe5S4NAKrGipdhWe7NY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
