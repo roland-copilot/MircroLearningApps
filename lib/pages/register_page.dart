@@ -1,6 +1,7 @@
 import 'package:elearning/util/contstant.dart';
 import 'package:elearning/widget/auth_button.dart';
 import 'package:elearning/widget/textfield_custom.dart';
+import 'package:elearning/service/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,6 +13,51 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final FirebaseService _firebaseService = FirebaseService();
+  bool _isLoading = false;
+
+  void _register() async {
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirm = _confirmPasswordController.text.trim();
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
+      return;
+    }
+    if (password != confirm) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _firebaseService.signUp(name, email, password);
+      if (mounted) {
+        Navigator.pop(context); // Go back to login on success
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registration successful!')));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextfieldCustom(
                     obsecure: false,
                     hint: 'John Doe',
-                    controller: TextEditingController(),
+                    controller: _nameController,
                   ),
                 ],
               ),
@@ -75,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextfieldCustom(
                     obsecure: false,
                     hint: 'johndoe@example.com',
-                    controller: TextEditingController(),
+                    controller: _emailController,
                   ),
                 ],
               ),
@@ -94,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextfieldCustom(
                     obsecure: true,
                     hint: '************',
-                    controller: TextEditingController(),
+                    controller: _passwordController,
                   ),
                 ],
               ),
@@ -113,7 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextfieldCustom(
                     obsecure: true,
                     hint: '************',
-                    controller: TextEditingController(),
+                    controller: _confirmPasswordController,
                   ),
                 ],
               ),
@@ -143,8 +189,14 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: AuthButton(buttonName: 'Create an account'),
+              child: _isLoading 
+                ? const CircularProgressIndicator()
+                : GestureDetector(
+                    onTap: _register,
+                    child: AuthButton(buttonName: 'Create an account'),
+                  ),
             ),
+            SizedBox(height: 40),
           ],
         ),
       ),

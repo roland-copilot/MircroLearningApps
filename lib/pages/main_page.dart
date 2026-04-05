@@ -1,6 +1,8 @@
 import 'package:elearning/pages/home_page.dart';
 import 'package:elearning/pages/library_page.dart';
 import 'package:elearning/pages/profile_page.dart';
+import 'package:elearning/pages/upload_document_page.dart';
+import 'package:elearning/pages/history_page.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -18,8 +20,8 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = [
     const HomePage(),
     const LibraryPage(),
-    const _CenterTextPage(title: 'Create'),
-    const _CenterTextPage(title: 'History'),
+    const UploadDocumentPage(),
+    const HistoryPage(),
     const ProfilePage(),
   ];
 
