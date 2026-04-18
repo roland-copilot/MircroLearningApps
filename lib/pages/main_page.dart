@@ -1,9 +1,9 @@
 import 'package:elearning/pages/home_page.dart';
 import 'package:elearning/pages/library_page.dart';
 import 'package:elearning/pages/profile_page.dart';
-import 'package:elearning/pages/upload_document_page.dart';
 import 'package:elearning/pages/history_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -14,14 +14,13 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  static const Color _selectedColor = Colors.blue;
-  static const Color _unselectedColor = Colors.grey;
+  static final Color _selectedColor = Colors.green.shade700;
+  static const Color _unselectedColor = Color(0xFF7B8790);
 
   final List<Widget> _pages = [
     const HomePage(),
     const LibraryPage(),
-    const UploadDocumentPage(),
-    const HistoryPage(),
+    const HistoryPage(), // Using History as Jadwal equivalent for now
     const ProfilePage(),
   ];
 
@@ -34,28 +33,32 @@ class _MainPageState extends State<MainPage> {
 
     return Expanded(
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
         onTap: () {
           setState(() {
             _selectedIndex = index;
           });
         },
-        child: SizedBox(
-          height: 60,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: isSelected ? Colors.blue.shade600 : Colors.transparent,
+                width: 2.0,
+              ),
+            ),
+          ),
+          height: 65,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, color: isSelected ? _selectedColor : _unselectedColor),
-              const SizedBox(height: 2),
+              const SizedBox(height: 4),
               Text(
                 label,
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   color: isSelected ? _selectedColor : _unselectedColor,
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  fontSize: 11,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 ),
               ),
             ],
@@ -68,55 +71,41 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFFAF9F7),
       body: _pages[_selectedIndex],
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _selectedIndex = 2;
-          });
-        },
-        backgroundColor: _selectedColor,
-        shape: CircleBorder(),
-        child: const Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6,
-        child: SizedBox(
-          height: 64,
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Color(0xFFE5E1DB), width: 1.0)),
+        ),
+        child: SafeArea(
+          top: false,
           child: Row(
             children: [
-              _buildNavItem(index: 0, icon: Icons.home_rounded, label: 'Home'),
+              _buildNavItem(
+                index: 0,
+                icon: Icons.grid_view_rounded,
+                label: 'Home',
+              ),
               _buildNavItem(
                 index: 1,
-                icon: Icons.menu_book_outlined,
+                icon: Icons.menu_book_rounded,
                 label: 'Library',
               ),
-              const SizedBox(width: 56),
-              _buildNavItem(index: 3, icon: Icons.history, label: 'History'),
               _buildNavItem(
-                index: 4,
-                icon: Icons.person_outline,
-                label: 'Profile',
+                index: 2,
+                icon: Icons.calendar_today_rounded,
+                label: 'Jadwal',
+              ),
+              _buildNavItem(
+                index: 3,
+                icon: Icons.person_outline_rounded,
+                label: 'Akun',
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class _CenterTextPage extends StatelessWidget {
-  const _CenterTextPage({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(title, style: Theme.of(context).textTheme.headlineMedium),
     );
   }
 }
